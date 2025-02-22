@@ -167,7 +167,7 @@ export default {
         }
     },
     created(){
-        console.log("Github CI/CD Succeed");
+        console.log("From new Gihub Actions");
     },
     methods: {
         async login() {
