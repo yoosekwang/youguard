@@ -19,6 +19,7 @@ export default defineNuxtConfig({
       title: '유가드넷 | YouGuard - 스마트 보안 솔루션 플랫폼',
       meta: [
         { name: 'robots', content: 'index,follow' },
+        <meta name="naver-site-verification" content="381536388606e0a1f1bde9d1ef74c55e21167d6c" />,
         { name: 'description', content: '유가드넷 | YouGuard - 스마트 보안 솔루션 & 워터마크 보호 시스템.' },
         { name: 'author', content: 'YouGuard' },
         { name: 'keywords', content: '유가드넷, youguard, 보안 솔루션, 스마트 보안, 온라인 보안' },
