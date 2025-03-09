@@ -67,12 +67,12 @@
                                 Announcements
                             </a>
 
-                            <a href="/admin/software"
+                            <!-- <a href="/admin/software"
                                 class="flex items-center px-4 py-2.5 text-md font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group">
                                 <Icon class="flex-shrink-0 w-5 h-5 mr-4" icon="grommet-icons:cloud-software" />
                                 Software
 
-                            </a>
+                            </a> -->
                         </nav>
 
 

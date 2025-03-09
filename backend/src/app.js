@@ -2,11 +2,15 @@ const express = require('express')
 const { json } = require('body-parser');
 const authRoutes = require('./routes/authRoutes')
 const adminAuthRoutes = require('./routes/adminAuthRoutes')
+const developerAuthRoutes = require('./routes/developerAuthRoutes')
 const messageRoutes = require('./routes/messageRoutes')
 const notificationRoutes = require('./routes/notificationRoutes')
 const softwareRoutes = require('./routes/softwareRoutes')
 const userRoutes = require('./routes/userRoutes')
 const regionRoutes = require('./routes/regionRoutes')
+const translationRoutes = require('./routes/translationRoutes')
+const settingRoutes = require('./routes/settingRoutes')
+const uploadRoutes = require('./routes/uploadRoutes')
 const bodyParser = require('body-parser')
 const connectDB = require('../src/config/db')
 const app = express();
@@ -18,6 +22,7 @@ connectDB()
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true}))
+app.use('/uploads', express.static('uploads'));
 
 app.use(cors({
     origin: "*",  // Allows all origins
@@ -28,7 +33,11 @@ app.use(cors({
   
 
 //routes
+app.use('/api', uploadRoutes)
+app.use('/api', settingRoutes)
+app.use('/api', translationRoutes)
 app.use('/api', authRoutes)
+app.use('/api', developerAuthRoutes)
 app.use('/api', messageRoutes)
 app.use('/api', notificationRoutes)
 app.use('/api', adminAuthRoutes)

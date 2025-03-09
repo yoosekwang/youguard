@@ -19,7 +19,7 @@
                         <button class="p-2 rounded-full hover:bg-gray-100">
                         </button>
                         <div class="flex items-center space-x-2">
-                            <NuxtLink to="/admin/account" class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                            <NuxtLink :to="`/${role}/account`" class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
                                 <span class="text-white text-sm">AD</span>
                             </NuxtLink>
                         </div>
@@ -32,6 +32,11 @@
 
 <script>
 export default {
+    data(){
+        return{
+            role: 'admin'
+        }
+    },
     props: {
         toggleSidebar: {
             type: Function
@@ -41,6 +46,9 @@ export default {
         openSidebar() {
             this.toggleSidebar()
         }
+    },
+    mounted(){
+        this.role = localStorage.getItem('role');
     },
     computed: {
         // Map route names to custom strings

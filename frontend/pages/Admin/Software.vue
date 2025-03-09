@@ -257,7 +257,7 @@ export default {
             }
             try {
                 const response = await axios.get(
-                    '/api/softwares',
+                    `${useRuntimeConfig().public.apiBase}/api/notifications/api/softwares`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -323,7 +323,7 @@ export default {
 
             try {
                 const response = await axios.post(
-                    '/api/softwares/new',
+                    `${useRuntimeConfig().public.apiBase}/api/softwares/new`,
                     formData,
                     {
                         headers: {

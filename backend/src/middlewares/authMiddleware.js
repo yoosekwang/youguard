@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Admin = require('../models/Admin');
+const Developer = require('../models/Developer');
 
 const protect = async (req, res, next) => {
     let token;
@@ -18,13 +19,15 @@ const protect = async (req, res, next) => {
     try {
         // Verify the token
         const decoded = jwt.verify(token, process.env.SECRETKEY);
-
+  
         // Determine the user type and fetch the user object
         let user;
         if (decoded.userId) {
             user = await User.findById(decoded.userId).select('-password');
         } else if (decoded.adminId) {
             user = await Admin.findById(decoded.adminId).select('-password');
+        } else if (decoded.developerId){
+            user = await Developer.findById(decoded.developerId).select('-password');
         }
 
         // If no user is found, return an error
@@ -56,7 +59,17 @@ const isAdmin = (req, res, next) => {
   return res.status(403).json({ message: 'You are not authorized to access this route' });
 };  
 
+const isDeveloper = (req, res, next) => {
+    if (req.user && req.user.role === 'Developer') {
+        return next();  // Proceed if the user is an admin
+    }
+    
+    // If the user is not an admin, send an unauthorized response
+    return res.status(403).json({ message: 'You are not authorized to access this route' });
+  }; 
+
 module.exports = {
   protect,
-  isAdmin
+  isAdmin,
+  isDeveloper
 };

@@ -116,8 +116,8 @@ const fetchUserDetails = async () => {
             toast.error('Access token is missing. Please log in again.')
             return
         }
-
-        const response = await axios.get('/api/user/details', {
+        const config = useRuntimeConfig();
+        const response = await axios.get(`${config.public.apiBase}/api/user/details`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -141,7 +141,8 @@ const updateProfile = async () => {
 
     isLoading.value = true
     try {
-        await axios.put(`/api/users/${user.value.ID}`,
+        const config = useRuntimeConfig();
+        await axios.put(`${config.public.apiBase}/api/users/${user.value.ID}`,
             {
                 name: user.value.Name,
                 username: user.value.Username,
@@ -171,8 +172,9 @@ const changePassword = async () => {
             throw new Error('Please fill in all fields')
         }
 
+        const config = useRuntimeConfig();
         await axios.put(
-            `/api/user/change-password`,
+            `${config.public.apiBase}/api/user/change-password`,
             {
                 password: passwordForm.current,
                 newPassword: passwordForm.new,

@@ -11,7 +11,11 @@ export default defineNuxtConfig({
   router: {
     middleware: ['auth'],
   },
-  
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:5000', // can be overridden by NUXT_PUBLIC_API_BASE environment variable
+    }
+  },
   css: ['~/assets/css/main.css', 'vue3-toastify/dist/index.css'],
   // ✅ SEO 및 인증 태그 추가
   app: {
@@ -29,4 +33,8 @@ export default defineNuxtConfig({
       ],
     },
   },
+  modules: ['@nuxtjs/i18n', '@pinia/nuxt'],
+  i18n: {
+    vueI18n: './i18n.config.js' // if you are using custom path, default
+  }
 });

@@ -379,7 +379,8 @@ const userDetails = ref({})
 const fetchUserDetails = async () => {
   try {
     const token = localStorage.getItem("accessToken")
-    const response = await axios.get("/api/user/details",
+    const config = useRuntimeConfig()
+    const response = await axios.get(`${config.public.apiBase}/api/user/details`,
       {
         headers: {
           Authorization: `Bearer ${token}`

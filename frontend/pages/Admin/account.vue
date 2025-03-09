@@ -241,7 +241,7 @@ const handleAvatarUpload = async (event) => {
         formData.append('avatar', file)
 
         // TODO: Replace with your actual API endpoint
-        const response = await axios.post('/api/admin/avatar', formData, {
+        const response = await axios.post(`${useRuntimeConfig().public.apiBase}/api/admin/avatar`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -261,7 +261,7 @@ const handleProfileUpdate = async () => {
         setIsSubmitting(true)
         const token = localStorage.getItem('accessToken')
 
-        await axios.put('/api/admin/change-name',
+        await axios.put(`${useRuntimeConfig().public.apiBase}/api/admin/change-name`,
             { name: profileForm.value.name },
             {
                 headers: {
@@ -294,7 +294,7 @@ const handlePasswordChange = async () => {
         isSubmitting.value = true
         const token = localStorage.getItem('accessToken')
 
-        await axios.put('/api/admin/change-password',
+        await axios.put(`${useRuntimeConfig().public.apiBase}/api/admin/change-password`,
             {
 
                 password: passwordForm.value.currentPassword,
@@ -332,7 +332,7 @@ const fetchUserDetails = async () => {
             return
         }
 
-        const response = await axios.get('/api/admin/details', {
+        const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/admin/details`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

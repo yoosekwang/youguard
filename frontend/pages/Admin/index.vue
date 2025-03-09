@@ -211,7 +211,7 @@ const createRegion = async () => {
     const input = newRegionName.value.trim();
     const token = localStorage.getItem("accessToken")
     try {
-        const response = await axios.post('/api/regions/new',
+        const response = await axios.post(`${useRuntimeConfig().public.apiBase}/api/regions/new`,
             {
                 region: input
             },
@@ -239,7 +239,7 @@ const allRegions = ref([])
 const fetchAllRegions = async () => {
     const token = localStorage.getItem('accessToken');
     try {
-        const response = await axios.get('/api/regions',
+        const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/regions`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -263,7 +263,7 @@ const saveAnnouncement = async () => {
             content: announcementContent.value,
         };
         const response = await axios.post(
-            '/api/notifications/new',
+            `${useRuntimeConfig().public.apiBase}/api/notifications/new`,
             requestBody,
             {
                 headers: {
@@ -288,7 +288,7 @@ const fetchRegionNames = async () => {
     try {
         const token = localStorage.getItem('accessToken');
         const response = await axios.get(
-            '/api/regions',
+            `${useRuntimeConfig().public.apiBase}/api/regions`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -313,7 +313,7 @@ const fetchUsers = async () => {
     try {
         const token = localStorage.getItem('accessToken');
         const response = await axios.get(
-            '/api/users',
+            `${useRuntimeConfig().public.apiBase}/api/users`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -385,7 +385,7 @@ const deleteRegion = async () => {
     isDeleting.value = true
     const token = localStorage.getItem('accessToken');
     try {
-        await axios.delete(`/api/regions/${regionToDelete.value}`, {
+        await axios.delete(`${useRuntimeConfig().public.apiBase}/api/regions/${regionToDelete.value}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

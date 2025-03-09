@@ -74,7 +74,8 @@ const userDetails = ref({})
 const fetchUserDetails = async () => {
     try {
         const token = localStorage.getItem("accessToken")
-        const response = await axios.get('/api/user/details',
+        const config = useRuntimeConfig();
+        const response = await axios.get(`${config.public.apiBase}/api/user/details`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -112,7 +113,7 @@ softwares.value.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
 const fetchAllSoftwares = async () => {
     try {
         const token = localStorage.getItem("accessToken")
-        const response = await axios.get('/api/softwares', {
+        const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/softwares`, {
 
             headers: {
                 Authorization: `Bearer ${token}`
@@ -137,7 +138,7 @@ const fetchVersions = async () => {
     }
     try {
         const response = await axios.get(
-            '/api/softwares',
+            `${useRuntimeConfig().public.apiBase}/api/softwares`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -175,7 +176,7 @@ const fetchVersions = async () => {
 const fetchAllNotifications = async () => {
     const token = localStorage.getItem('accessToken');
     try {
-        const response = await axios.get('/api/notifications', {
+        const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/notifications`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -192,7 +193,7 @@ const downloadSoftware = async () => {
     const token = localStorage.getItem("accessToken");
     try {
         const data = await axios.get(
-            `/api/softwares/download/${softwareId.value}`,
+            `${useRuntimeConfig().public.apiBase}/api/softwares/download/${softwareId.value}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`,

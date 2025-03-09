@@ -116,7 +116,7 @@ const submitPasswordReset = async () => {
     loading.value = true;
     const token = route.params.token;
     try {
-        await axios.put(`/api/user/reset-password/${token}`, {
+        await axios.put(`${useRuntimeConfig().public.apiBase}/api/user/reset-password/${token}`, {
             password: newPassword.value,
         });
         message.value = "Password reset successfully!";

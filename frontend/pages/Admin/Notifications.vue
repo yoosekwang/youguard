@@ -94,7 +94,7 @@ const notifications = ref([]);
 const fetchAllNotifications = async () => {
     const token = localStorage.getItem('accessToken');
     try {
-        const response = await axios.get('/api/notifications', {
+        const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/notifications`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

@@ -3,46 +3,48 @@
         <section class="bg-white">
             <div class="grid grid-cols-1 lg:grid-cols-2">
 
-
                 <div
                     class="relative hidden md:flex items-end px-4 pb-10 pt-60 sm:pb-16 md:justify-center lg:pb-24 bg-gray-50 sm:px-6 lg:px-8">
                     <div class="absolute inset-0">
-                        <img class="object-cover w-full h-screen"
+                        <img v-if="settingsStore.settings?.loginBanner" class="object-cover w-full h-screen"
+                            :src="settingsStore.settings?.loginBanner"
+                            alt="" />
+                        <img v-else class="object-cover w-full h-screen"
                             src="https://cdn.rareblocks.xyz/collection/celebration/images/signup/4/girl-working-on-laptop.jpg"
                             alt="" />
                     </div>
                     <div class="z-20">
                         <div class="flex z-20 items-center">
-                            <Icon icon="material-symbols:water-drop-outline-rounded" width="4em" height="4em"
+                            <img v-if="settingsStore.settings?.logo" :src="settingsStore.settings?.logo" alt="" width="250">
+                            <div v-else>
+                                <Icon icon="material-symbols:water-drop-outline-rounded" width="4em" height="4em"
                                 class="text-blue-600" />
-                            <span class="text-6xl font-medium uppercase text-white font-bold"> <span
+                                <span class="text-6xl font-medium uppercase text-white font-bold"> <span
                                     class="text-blue-700">You</span>Guard</span>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="absolute h-screen inset-0 bg-gradient-to-t from-black to-transparent"></div>
                 </div>
 
-
-
-
-
-
-
-
-
                 <div class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                     <div class="xl:w-full xl:max-w-sm w-full xl:mx-auto">
-                        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign in</h2>
-                        <p class="mt-2 text-base text-gray-600">Don't have an account? <NuxtLink href="/signup" title=""
-                                class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
-                                Register</NuxtLink>
+                        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">{{$t("login_sign_in")}}</h2>
+                        <p class="mt-2 text-base text-gray-600">{{$t("login_dont_have_an_account")}}
+                            
+                            
+                            <NuxtLink href="/signup" title=""
+                                class="primary-color font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
+                            <span class="ml-1">{{$t("login_register")}}</span>    
+                            </NuxtLink>
                         </p>
 
                         <form action="#" method="POST" class="mt-8">
                             <div class="space-y-5">
 
                                 <div>
-                                    <label for="" class="text-base font-medium text-gray-900"> Email address </label>
+                                    <label for="" class="text-base font-medium text-gray-900">{{$t("login_email_address")}}</label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -53,14 +55,14 @@
                                             </svg>
                                         </div>
 
-                                        <input type="text" name="" id="email" placeholder="Enter email to get started"
-                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                        <input type="text" name="" id="email" :placeholder="$t('login_enter_email_to_get_started')"
+                                            class="custom-input block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="email" />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="" class="text-base font-medium text-gray-900"> Password </label>
+                                    <label for="" class="text-base font-medium text-gray-900">{{$t("login_password")}}  </label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -72,8 +74,8 @@
                                         </div>
 
                                         <input :type="showPassword ? 'text' : 'password'" name="" id="pass"
-                                            placeholder="Enter your password"
-                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                            :placeholder="$t('login_enter_your_password')"
+                                            class="custom-input block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="password" />
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                             <button type="button" @click="togglePasswordVisibility"
@@ -96,7 +98,7 @@
 
                                 <div>
                                     <button type="button"
-                                        class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
+                                        class="primary-btn inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
                                         @click="login">
                                         <span v-if="isLoading" class="mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
@@ -118,13 +120,13 @@
                                                 </circle>
                                             </svg>
                                         </span>
-                                        <span v-else> Sign in</span>
+                                        <span v-else>{{$t("login_sign_in")}}</span>
                                     </button>
 
                                     <p class="mt-2 text-base text-gray-600">
                                         <NuxtLink href="/forgot-password" title=""
-                                            class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
-                                            Forgot password?
+                                            class="primary-color font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
+                                            {{$t("login_forgot_password")}}
                                         </NuxtLink>
                                     </p>
                                 </div>
@@ -149,11 +151,19 @@
     </div>
 </template>
 
+<script setup>
+import { useSettingsStore } from '~/stores/settings'
+const settingsStore = useSettingsStore()
+</script>
+
 <script>
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 import { Icon } from "@iconify/vue";
 
+definePageMeta({
+    middleware: 'guest'
+})
 export default {
     components: {
         Icon
@@ -166,14 +176,14 @@ export default {
             showPassword: false
         }
     },
-    created(){
+    created() {
         console.log("From new Gihub Actions");
     },
     methods: {
         async login() {
             try {
                 this.isLoading = true;
-                const response = await axios.post('/api/user/login', {
+                const response = await axios.post(`${useRuntimeConfig().public.apiBase}/api/user/login`, {
                     usernameOrEmail: this.email,
                     password: this.password
                 });

@@ -124,7 +124,7 @@ const verifyOTP = async () => {
     await new Promise(resolve => setTimeout(resolve, 1500)); // Simulated API dela
 
     const email = localStorage.getItem('Email-onSignup')
-    const response = await axios.post('/api/user/verify-email', {
+    const response = await axios.post(`${useRuntimeConfig().public.apiBase}/api/user/verify-email`, {
       email,
       otp
     })

@@ -5,16 +5,22 @@
                 <div
                     class="relative hidden md:flex items-end px-4 pb-10 pt-60 sm:pb-16 md:justify-center lg:pb-24 bg-gray-50 sm:px-6 lg:px-8">
                     <div class="absolute inset-0">
-                        <img class="object-cover w-full h-full"
+                        <img v-if="settingsStore.settings?.loginBanner" class="object-cover w-full h-screen"
+                            :src="settingsStore.settings?.loginBanner"
+                            alt="" />
+                        <img v-else class="object-cover w-full h-screen"
                             src="https://cdn.rareblocks.xyz/collection/celebration/images/signup/4/girl-working-on-laptop.jpg"
                             alt="" />
                     </div>
                     <div class="z-20">
                         <div class="flex z-20 items-center">
-                            <Icon icon="material-symbols:water-drop-outline-rounded" width="4em" height="4em"
+                            <img v-if="settingsStore.settings?.logo" :src="settingsStore.settings?.logo" alt="" width="250">
+                            <div v-else>
+                                <Icon icon="material-symbols:water-drop-outline-rounded" width="4em" height="4em"
                                 class="text-blue-600" />
-                            <span class="text-6xl font-medium uppercase text-white font-bold"> <span
+                                <span class="text-6xl font-medium uppercase text-white font-bold"> <span
                                     class="text-blue-700">You</span>Guard</span>
+                            </div>
                         </div>
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
@@ -23,16 +29,18 @@
 
                 <div class="flex items-center justify-center px-4 py-10 bg-white sm:px-6 lg:px-8 sm:py-16 lg:py-24">
                     <div class="xl:w-full xl:max-w-sm w-full xl:mx-auto">
-                        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign up</h2>
-                        <p class="mt-2 text-base text-gray-600">Already have an account? <NuxtLink to="/signin" title=""
-                                class="font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
-                                Login</NuxtLink>
+                        <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl">{{ $t("registration_sign_up") }}</h2>
+                        <p class="mt-2 text-base text-gray-600">{{ $t("registration_already_have_an_account") }} 
+                            
+                            <NuxtLink to="/signin" title=""
+                                class="primary-color font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
+                                {{ $t("registration_login") }}</NuxtLink>
                         </p>
 
                         <form action="#" method="POST" class="mt-8">
                             <div class=" grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div class="col-span-2">
-                                    <label for="" class="text-base font-medium text-gray-900"> Business name </label>
+                                    <label for="" class="text-base font-medium text-gray-900">{{ $t("registration_business_name") }}</label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -43,15 +51,15 @@
                                             </svg>
                                         </div>
 
-                                        <input type="text" name="" id="" placeholder="Enter your full name"
-                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                        <input type="text" name="" id="" :placeholder="$t('registration_enter_your_full_name')"
+                                            class="custom-input block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="fullname" />
                                     </div>
                                 </div>
 
 
                                 <div class="col-span-2">
-                                    <label for="" class="text-base font-medium text-gray-900"> Email address </label>
+                                    <label for="" class="text-base font-medium text-gray-900">{{ $t("registration_email_address") }} </label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -62,20 +70,20 @@
                                             </svg>
                                         </div>
 
-                                        <input type="email" name="" id="" placeholder="Enter email to get started"
-                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                        <input type="email" name="" id="" :placeholder="$t('registration_enter_email_to_get_started')"
+                                            class="custom-input block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="email" />
                                     </div>
                                 </div>
 
                                 <div class="col-span-2">
                                     <label for="region" class="text-base font-medium text-gray-900">
-                                        Select Region
+                                        {{ $t("registration_select_region") }}
                                     </label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
 
                                         <select id="region"
-                                            class="block w-full py-4 px-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                            class="custom-input block w-full py-4 px-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="selectedRegion">
                                             <option v-for="region in regions" :key="region._id" :value="region._id">
                                                 {{ region.region }}
@@ -85,7 +93,7 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <label for="password" class="text-base font-medium text-gray-900"> Password </label>
+                                    <label for="password" class="text-base font-medium text-gray-900">{{ $t("registration_password") }} </label>
                                     <div class="mt-2.5 relative text-gray-400 focus-within:text-gray-600">
                                         <div
                                             class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -97,8 +105,8 @@
                                         </div>
 
                                         <input :type="showPassword ? 'text' : 'password'" name="password" id="password"
-                                            placeholder="Enter your password"
-                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
+                                            :placeholder="$t('registration_enter_your_password')"
+                                            class="custom-input block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:border-blue-600 focus:bg-white caret-blue-600"
                                             v-model="password" />
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                             <button type="button" @click="togglePasswordVisibility"
@@ -121,7 +129,7 @@
 
                                 <div class="w-full">
                                     <button type="button"
-                                        class="md:inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
+                                        class="primary-btn md:inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 border border-transparent rounded-md bg-blue-600 focus:outline-none hover:opacity-80 focus:opacity-80"
                                         @click="signup">
                                         <span v-if="isLoading" class="mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
@@ -143,7 +151,7 @@
                                                 </circle>
                                             </svg>
                                         </span>
-                                        <span v-else> Create Account</span>
+                                        <span v-else>{{ $t("registration_create_account") }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -155,12 +163,17 @@
 
     </div>
 </template>
-
+<script setup>
+import { useSettingsStore } from '~/stores/settings'
+const settingsStore = useSettingsStore()
+</script>
 <script>
 import { Icon } from '@iconify/vue/dist/iconify.js';
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
-
+definePageMeta({
+    middleware: 'guest'
+})
 export default {
     components: {
         Icon
@@ -183,7 +196,7 @@ export default {
         async signup() {
             try {
                 this.isLoading = true;
-                const response = await axios.post('/api/user/signup', {
+                const response = await axios.post(`${useRuntimeConfig().public.apiBase}/api/user/signup`, {
                     fullName: this.fullname,
                     username: this.username,
                     email: this.email,
@@ -206,7 +219,7 @@ export default {
 
         async fetchRegions() {
             try {
-                const response = await axios.get('/api/regions'); // Replace with your API endpoint
+                const response = await axios.get(`${useRuntimeConfig().public.apiBase}/api/regions`); // Replace with your API endpoint
                 const data = await response.data;
                 this.regions = data.regions || []; // Assuming API response has a `regions` array
                 console.log("Regions", data.regions);

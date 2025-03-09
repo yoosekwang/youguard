@@ -181,7 +181,8 @@ const confirmDelete = async () => {
     if (selectedUser.value) {
         try {
             const token = localStorage.getItem("accessToken");
-            await axios.delete(`/api/users/${selectedUser.value.id}`, {
+            const config = useRuntimeConfig()
+            await axios.delete(`${config.public.apiBase}/api/users/${selectedUser.value.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             toast.success(`User ${selectedUser.value.name} deleted successfully`);
@@ -212,7 +213,8 @@ const users = ref([]);
 const fetchUsers = async () => {
     try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get('/api/users', {
+        const config = useRuntimeConfig()
+        const response = await axios.get(`${config.public.apiBase}/api/users`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -243,7 +245,8 @@ const regionsMap = ref({});
 const fetchRegions = async () => {
     try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get('/api/regions', {
+        const config = useRuntimeConfig()
+        const response = await axios.get(`${config.public.apiBase}/api/regions`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -334,8 +337,9 @@ const toggleApproval = async (user) => {
         const updatedStatus = !currentStatus;
         console.log("Sattus", updatedStatus, token)
 
+        const config = useRuntimeConfig()
         const response = await axios.patch(
-            `/api/users/${id}/approve`,
+            `${config.public.apiBase}/api/users/${id}/approve`,
             {},
             {
                 headers: {

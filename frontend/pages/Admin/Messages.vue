@@ -177,7 +177,7 @@ const fetchMessages = async () => {
     }
 
     const data = await axios.get(
-      "/api/messages",
+      `${useRuntimeConfig().public.apiBase}/api/messages`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -218,7 +218,7 @@ const fetchMessages = async () => {
 const fetchUserName = async (id) => {
   try {
     const data = await axios.get(
-      `/api/users/${id}`
+      `${useRuntimeConfig().public.apiBase}/api/users/${id}`
     );
     console.log("chat user:", data.data);
 
@@ -245,7 +245,7 @@ const selectUser = async (user, name) => {
   console.log("One user:", user);
   try {
     const data = await axios.get(
-      `/api/messages/${user._id}`,
+      `${useRuntimeConfig().public.apiBase}/api/messages/${user._id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -266,7 +266,7 @@ const sendMessage = async () => {
     const token = localStorage.getItem("accessToken");
 
     await axios.post(
-      `/api/messages/${selectedUserId.value}`,
+      `${useRuntimeConfig().public.apiBase}/api/messages/${selectedUserId.value}`,
       { content: newMessage.value },
       { headers: { Authorization: `Bearer ${token}` } }
     );

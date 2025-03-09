@@ -77,7 +77,8 @@ const toggleModal = () => {
 const fetchAllNotifications = async () => {
     const token = localStorage.getItem('accessToken');
     try {
-        const response = await axios.get('/api/notifications', {
+        const config = useRuntimeConfig()
+        const response = await axios.get(`${config.public.apiBase}/api/notifications`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
