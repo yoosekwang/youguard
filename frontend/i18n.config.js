@@ -7,7 +7,7 @@ export default defineI18nConfig(async () => {
     let translations = null;
 
     try{
-        const res = await axios.get("http://localhost:5000/api/translations");
+        const res = await axios.get(`${useRuntimeConfig().public.apiBase}/api/translations`);
         translations = res.data;
         if(Object.keys(translations.en) <= 0){
             translations = {
