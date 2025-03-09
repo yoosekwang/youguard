@@ -19,7 +19,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
               color: ${settingsStore.settings?.buttonTextColor} !important; 
             }
             .hero {
-               background: url('${settingsStore.settings?.homeBanner}') !important;
+              background: url('${settingsStore.settings?.homeBanner}') !important;
+              background-repeat: no-repeat !important;
+              background-position: 50% !important;
             }
             .icon-color{
               color: ${settingsStore.settings?.primaryColor} !important; 
