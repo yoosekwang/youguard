@@ -66,7 +66,101 @@ const updateDeveloper = async (req, res) => {
     }
 }
 
+const getDeveloper = async(req, res) => {
+    try{
+      
+        const developer = await Developer.findOne()
+        if(!developer){
+            return res.status(404).json({ message: 'Developer not found'})
+        }
+
+        const developerInfo = {
+            name: developer.name,
+            email: developer.email,
+            role: developer.role
+        }
+
+        res.status(200).json({
+            success:true,
+            message: 'Developer Details fetched successfully',
+            developerInfo
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: err.message
+        })
+    }
+}
+
+const changeDeveloperName = async(req, res) => {
+    try{
+     
+        const developer = await Developer.findOne()
+        if(!developer){
+            return res.status(404).json({ message: 'Developer not found'})
+        }
+
+        const { name } = req.body
+        developer.name = name
+        await developer.save()
+
+        res.status(200).json({
+            success: true,
+            message: 'Developer name changed successfully',
+            name: developer.name
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: err.message
+        })
+    }
+}
+
+
+const changeDeveloperPassword = async (req, res) => {
+    try{
+
+        const developer = await Developer.findOne()
+        if(!developer){
+            return res.status(400).json({message: 'Developer not found'})
+        }
+
+        const {password, newPassword} = req.body
+        const matchedPassword = await bcrypt.compare(password, developer.password)
+        if(!matchedPassword){
+            return res.status(400).json({message: 'Current Password Not Correct'})
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+        developer.password = hashedPassword
+        await developer.save()
+
+        res.status(200).json({
+            success: true,
+            message: 'Password updated successfully'
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+            error: err.message
+        })
+    }
+}
+
 module.exports = {
     getDevelopers,
-    updateDeveloper
+    updateDeveloper,
+    getDeveloper,
+    changeDeveloperName,
+    changeDeveloperPassword
 }
