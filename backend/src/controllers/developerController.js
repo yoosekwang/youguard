@@ -103,8 +103,9 @@ const changeDeveloperName = async(req, res) => {
             return res.status(404).json({ message: 'Developer not found'})
         }
 
-        const { name } = req.body
+        const { name, email } = req.body
         developer.name = name
+        developer.email = email
         await developer.save()
 
         res.status(200).json({

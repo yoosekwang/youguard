@@ -244,8 +244,9 @@ const changeName = async(req, res) => {
             return res.status(404).json({ message: 'Admin not found'})
         }
 
-        const { name } = req.body
+        const { name,email } = req.body
         admin.name = name
+        admin.email = email
         await admin.save()
 
         res.status(200).json({

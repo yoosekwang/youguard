@@ -54,7 +54,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Email</label>
-                                    <input disabled v-model="profileForm.email" type="email"
+                                    <input v-model="profileForm.email" type="email"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
                                 </div>
 
@@ -221,7 +221,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Email</label>
-                                    <input disabled v-model="devProfileForm.email" type="email"
+                                    <input v-model="devProfileForm.email" type="email"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
                                 </div>
 
@@ -452,7 +452,7 @@ const handleProfileUpdate = async () => {
         const token = localStorage.getItem('accessToken')
 
         await axios.put(`${useRuntimeConfig().public.apiBase}/api/admin/change-name`,
-            { name: profileForm.value.name },
+            { name: profileForm.value.name, email: profileForm.value.email },
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -552,7 +552,7 @@ const handleDevProfileUpdate = async () => {
         const token = localStorage.getItem('accessToken')
 
         await axios.put(`${useRuntimeConfig().public.apiBase}/api/developers/change-dev-name`, 
-            { name: devProfileForm.value.name },
+            { name: devProfileForm.value.name, email: devProfileForm.value.email },
             {
                 headers: {
                     Authorization: `Bearer ${token}`
