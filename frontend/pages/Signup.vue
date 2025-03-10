@@ -5,8 +5,8 @@
                 <div
                     class="relative hidden md:flex items-end px-4 pb-10 pt-60 sm:pb-16 md:justify-center lg:pb-24 bg-gray-50 sm:px-6 lg:px-8">
                     <div class="absolute inset-0">
-                        <img v-if="settingsStore.settings?.loginBanner" class="object-cover w-full h-screen"
-                            :src="settingsStore.settings?.loginBanner"
+                        <img v-if="settingsStore.settings?.registrationBanner" class="object-cover w-full h-screen"
+                            :src="settingsStore.settings?.registrationBanner"
                             alt="" />
                         <img v-else class="object-cover w-full h-screen"
                             src="https://cdn.rareblocks.xyz/collection/celebration/images/signup/4/girl-working-on-laptop.jpg"
