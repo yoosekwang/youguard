@@ -29,7 +29,7 @@
                 </div>
 
                 <!-- Tabs Navigation -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <!-- <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="border-b border-gray-200">
                         <nav class="flex -mb-px">
                             <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
@@ -43,7 +43,6 @@
                         </nav>
                     </div>
 
-                    <!-- Profile Tab Content -->
                     <div v-if="activeTab === 'profile'" class="p-6">
                         <form @submit.prevent="handleProfileUpdate" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -85,7 +84,6 @@
                         </form>
                     </div>
 
-                    <!-- Password Tab Content -->
                     <div v-if="activeTab === 'security'" class="p-6">
                         <form @submit.prevent="handlePasswordChange" class="space-y-6">
                             <div>
@@ -157,7 +155,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Alert Messages -->
                 <div v-if="alert.show"
