@@ -178,7 +178,7 @@ import { toast } from 'vue3-toastify'
 
 const tabs = [
     { id: 'profile', name: 'Profile Details' },
-    { id: 'security', name: 'Security' }
+    // { id: 'security', name: 'Security' }
 ]
 
 const activeTab = ref('profile')
