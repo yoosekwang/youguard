@@ -129,6 +129,12 @@
                                             </p>
                                         </div>
 
+                                        <p class="mt-2 text-base text-gray-600 text-center mt-3">
+                                            <NuxtLink href="/admin/forgot-password" title=""
+                                                class="primary-color font-medium text-blue-600 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">
+                                                {{$t("login_forgot_password")}}
+                                            </NuxtLink>
+                                        </p>
 
                                     </div>
 
