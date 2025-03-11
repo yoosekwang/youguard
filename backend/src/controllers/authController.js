@@ -30,19 +30,10 @@ const transporter = nodemailer.createTransport({
         html,
       });
   
-      console.log("Email sent to:", to);
     } catch (error) {
       console.error("Email sending error:", error);
     }
   };
-
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail', 
-//     auth: { 
-//         user: process.env.EMAIL,
-//         pass: process.env.EMAIL_PASSWORD
-//     }
-// });
 
 const signup = async(req, res) => {
     try{
