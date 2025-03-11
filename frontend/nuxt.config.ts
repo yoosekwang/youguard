@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: 'https://youguard.net', // can be overridden by NUXT_PUBLIC_API_BASE environment variable
+      apiBase: 'http://localhost:4000',
+      // apiBase: 'https://youguard.net', // can be overridden by NUXT_PUBLIC_API_BASE environment variable
     }
   },
   css: ['~/assets/css/main.css', 'vue3-toastify/dist/index.css'],
