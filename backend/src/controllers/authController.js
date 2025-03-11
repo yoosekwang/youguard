@@ -3,19 +3,46 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv').config()
 const emailjs = require('emailjs-com')
-const nodemailer = require('nodemailer')
 const crypto = require('crypto')
+const nodemailer = require("nodemailer");
 
 require('dotenv').config();
 
 
+// Email Transporter Configuration (AWS SES)
 const transporter = nodemailer.createTransport({
-    service: 'gmail', 
-    auth: { 
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
+    host: process.env.AWS_SMTP_HOST,
+    port: 587, // Try 587 for TLS (or 465 for SSL)
+    secure: false, // false for TLS, true for SSL
+    auth: {
+      user: process.env.AWS_SMTP_USER,
+      pass: process.env.AWS_SMTP_PASSWORD,
+    },
+  });
+  
+  // Function to Send Email
+  const sendEmail = async (to, subject, html) => {
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL,
+        to,
+        subject,
+        html,
+      });
+  
+      console.log("Email sent to:", to);
+    } catch (error) {
+      console.error("Email sending error:", error);
     }
-});
+  };
+
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail', 
+//     auth: { 
+//         user: process.env.EMAIL,
+//         pass: process.env.EMAIL_PASSWORD
+//     }
+// });
 
 const signup = async(req, res) => {
     try{
@@ -84,18 +111,18 @@ const signup = async(req, res) => {
 //            </td>
 //        </tr>
 //    </table>
-//</body>
-//
+// </body>
+
 //    `
 
-//    const mailOptions = {
-//        from: process.env.EMAIL,
-//        to: email,
-//        subject: 'Verify Your Email',
-//        html: verifyTemplate
-//    };
-////
-//    await transporter.sendMail(mailOptions);
+   const mailOptions = {
+       from: process.env.EMAIL,
+       to: email,
+       subject: 'Verify Your Email',
+       html: verifyTemplate
+   };
+//
+   await transporter.sendMail(mailOptions);
 
     const payload = {
         userId : savedUser._id
@@ -281,7 +308,7 @@ const forgotPassword = async (req, res) => {
                     We received a request to reset the password for your account. If you didn't make this request, you can safely ignore this email.
                 </p>
                 <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
-                    To reset your password, click the button below. This link will expire in 60 minutes.
+                    To reset your password, click the button below. This link will expire in 10 minutes.
                 </p>
                 <div style="text-align: center; margin: 30px 0;">
                     <a href="${resetUrl}" style="display: inline-block; padding: 12px 30px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">Reset Password</a>
@@ -294,7 +321,7 @@ const forgotPassword = async (req, res) => {
                 <div style="margin-top: 30px; padding: 20px; background-color: #f8f8f8; border-radius: 5px;">
                     <p style="color: #666666; font-size: 14px; line-height: 1.5; margin: 0;">
                         For security reasons:
-                        <br>• This link will expire in 60 minutes
+                        <br>• This link will expire in 10 minutes
                         <br>• Can only be used once
                         <br>• If expired, please request a new password reset
                     </p>
@@ -313,17 +340,8 @@ const forgotPassword = async (req, res) => {
     </table>
 </body>
         `
-
-        const mailOptions = {
-            from: process.env.EMAIL,
-            to: user.email,
-            subject: 'Reset Your Password',
-            html: resetTemplate
-        };
-    //
-        await transporter.sendMail(mailOptions);
-
-
+    //Send email    
+    await sendEmail(user.email, "Password Reset Request", resetTemplate);
     res.status(200).json({ message: 'Password reset email sent successfully' });
     } catch (err) {
         console.error(err);
