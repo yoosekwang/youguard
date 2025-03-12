@@ -10,7 +10,7 @@ require('dotenv').config();
 // Email Transporter Configuration (AWS SES)
 const transporter = nodemailer.createTransport({
     host: process.env.AWS_SMTP_HOST,
-    port: 587, // Try 587 for TLS (or 465 for SSL)
+    port: 587, // Use 587 for TLS and 465 for SSL
     secure: false, // false for TLS, true for SSL
     auth: {
       user: process.env.AWS_SMTP_USER,
