@@ -60,11 +60,8 @@
 
                             <a href="/admin/logs"
                                 class="flex items-center px-4 py-2.5 text-md font-medium transition-all duration-200 text-gray-900 hover:text-white rounded-lg hover:bg-indigo-600 group">
-                                <svg class="flex-shrink-0 w-5 h-5 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                                <Icon class="flex-shrink-0 w-5 h-5 mr-4" icon="tabler:clipboard-text"
+                                    width="1.5em" height="1.5em" />
                                 Logs
                             </a>
 
