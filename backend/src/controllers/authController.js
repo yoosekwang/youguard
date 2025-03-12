@@ -57,7 +57,7 @@ const signup = async(req, res) => {
     })
     const savedUser = await newUser.save()
 
-   verifyTemplate = 
+  /* verifyTemplate = 
    `
    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
    <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
@@ -104,7 +104,7 @@ const signup = async(req, res) => {
 
    `
     await sendEmail(savedUser.email, "Account Verification", verifyTemplate);
-
+*/
     const payload = {
         userId : savedUser._id
     }
