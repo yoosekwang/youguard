@@ -59,52 +59,52 @@ const signup = async(req, res) => {
     })
     const savedUser = await newUser.save()
 
-//    verifyTemplate = 
-//    `
-//    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-//    <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-//        <tr>
-//            <td style="padding: 40px 30px; text-align: center; background-color: #2563eb;">
-//                <h1 style="color: #ffffff; margin: 0;">YouGuard</h1>
-//            </td>
-//        </tr>
-//        <tr>
-//            <td style="padding: 40px 30px;">
-//                <h2 style="color: #333333; margin-bottom: 20px;">Verify Your Email Address</h2>
-//                <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
-//                    Thank you for creating an account with YouGuard. To complete your registration, please use the verification code below:
-//                </p>
-//                <div style="text-align: center; margin: 30px 0;">
-//                    <div style="background-color: #f8f8f8; padding: 20px; border-radius: 5px; display: inline-block;">
-//                        <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #2563eb;">${otp}</span>
-//                    </div>
-//                </div>
-//                <div style="margin: 30px 0; padding: 20px; background-color: #f8f8f8; border-radius: 5px;">
-//                    <p style="color: #666666; font-size: 14px; line-height: 1.5; margin: 0;">
-//                        Important:
-//                        <br>• This code will expire in 10 minutes
-//                        <br>• Do not share this code with anyone
-//                        <br>• Enter this code on the verification page to complete your registration
-//                    </p>
-//                </div>
-//                <p style="color: #666666; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
-//                    If you did not create an account, no further action is required.
-//                </p>
-//            </td>
-//        </tr>
-//        <tr>
-//            <td style="padding: 20px 30px; background-color: #f8f8f8; text-align: center; font-size: 12px; color: #666666;">
-//                <p style="margin: 0;">
-//                    This is an automated message, please do not reply to this email.
-//                    <br>
-//                    &copy; 2025 YouGuard. All rights reserved.
-//                </p>
-//            </td>
-//        </tr>
-//    </table>
-// </body>
+   verifyTemplate = 
+   `
+   <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+   <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+       <tr>
+           <td style="padding: 40px 30px; text-align: center; background-color: #2563eb;">
+               <h1 style="color: #ffffff; margin: 0;">YouGuard</h1>
+           </td>
+       </tr>
+       <tr>
+           <td style="padding: 40px 30px;">
+               <h2 style="color: #333333; margin-bottom: 20px;">Verify Your Email Address</h2>
+               <p style="color: #666666; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                   Thank you for creating an account with YouGuard. To complete your registration, please use the verification code below:
+               </p>
+               <div style="text-align: center; margin: 30px 0;">
+                   <div style="background-color: #f8f8f8; padding: 20px; border-radius: 5px; display: inline-block;">
+                       <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #2563eb;">${otp}</span>
+                   </div>
+               </div>
+               <div style="margin: 30px 0; padding: 20px; background-color: #f8f8f8; border-radius: 5px;">
+                   <p style="color: #666666; font-size: 14px; line-height: 1.5; margin: 0;">
+                       Important:
+                       <br>• This code will expire in 10 minutes
+                       <br>• Do not share this code with anyone
+                       <br>• Enter this code on the verification page to complete your registration
+                   </p>
+               </div>
+               <p style="color: #666666; font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
+                   If you did not create an account, no further action is required.
+               </p>
+           </td>
+       </tr>
+       <tr>
+           <td style="padding: 20px 30px; background-color: #f8f8f8; text-align: center; font-size: 12px; color: #666666;">
+               <p style="margin: 0;">
+                   This is an automated message, please do not reply to this email.
+                   <br>
+                   &copy; 2025 YouGuard. All rights reserved.
+               </p>
+           </td>
+       </tr>
+   </table>
+</body>
 
-//    `
+   `
 
    const mailOptions = {
        from: process.env.EMAIL,
