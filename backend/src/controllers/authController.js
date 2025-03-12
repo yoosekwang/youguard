@@ -113,7 +113,14 @@ const signup = async(req, res) => {
        html: verifyTemplate
    };
 //
-   await transporter.sendMail(mailOptions);
+    const transporter1 = nodemailer.createTransport({
+        service: 'gmail', 
+        auth: { 
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+   await transporter1.sendMail(mailOptions);
 
     const payload = {
         userId : savedUser._id
