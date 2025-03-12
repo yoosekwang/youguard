@@ -8,6 +8,7 @@
             <!-- Main Content -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <!-- Stats Grid -->
+                {{ users }}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div v-for="stat in stats" :key="stat.title"
                         class="flex items-center gap-4 bg-white rounded-lg shadow p-6">
@@ -325,11 +326,10 @@ const fetchUsers = async () => {
 
         // Fetch region names
         const regionMap = await fetchRegionNames();
-
         // Calculate stats
         const totalUsers = users.length;
-        const pendingApprovals = users.filter(user => !user.approved).length;
-        const activeMembers = users.filter(user => user.approved).length;
+        const pendingApprovals = users.filter(user => !user.isApproved).length;
+        const activeMembers = users.filter(user => user.isApproved).length;
 
         // Update stats
         stats.value[0].value = totalUsers.toString();
