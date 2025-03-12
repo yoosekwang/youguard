@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      // apiBase: 'http://localhost:4000',
+      // apiBase: 'http://localhost:4000',//local
       apiBase: 'https://youguard.net', // can be overridden by NUXT_PUBLIC_API_BASE environment variable
     }
   },
