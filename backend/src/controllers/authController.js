@@ -105,22 +105,7 @@ const signup = async(req, res) => {
 </body>
 
    `
-
-   const mailOptions = {
-       from: process.env.EMAIL,
-       to: email,
-       subject: 'Verify Your Email',
-       html: verifyTemplate
-   };
-//
-    const transporter1 = nodemailer.createTransport({
-        service: 'gmail', 
-        auth: { 
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD
-        }
-    });
-   await transporter1.sendMail(mailOptions);
+    await sendEmail(savedUser.email, "Account Verification", verifyTemplate);
 
     const payload = {
         userId : savedUser._id
@@ -169,7 +154,7 @@ const verifyEmail = async (req, res) => {
             return res.status(400).json({ message: 'User not found...' });
         }
 
-        if (user.otp !== otp || user.otpExpires < Date.now()) {
+        if (user.otp != otp || user.otpExpires < Date.now()) {
             return res.status(400).json({ message: 'Invalid or expired OTP.' });
         }
 
