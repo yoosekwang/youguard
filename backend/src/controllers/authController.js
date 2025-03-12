@@ -3,6 +3,8 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
+const logger = require("../logger");
+
 
 require('dotenv').config();
 
@@ -29,7 +31,8 @@ const transporter = nodemailer.createTransport({
       });
   
     } catch (error) {
-      console.error("Email sending error:", error);
+        logger.error(`Email sending error:: ${error}`);
+        console.error("Email sending error:", error);
     }
   };
 
@@ -38,6 +41,7 @@ const signup = async(req, res) => {
         const { fullName, username, email, phoneNumber, password, region } = req.body
     const user = await User.findOne({ email })
     if(user){
+        logger.warn(`User already exists...`);
         return res.status(400).json('User already exists...')
     }
     const salt = await bcrypt.genSalt(10)
@@ -134,6 +138,7 @@ const signup = async(req, res) => {
     })
 
     } catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -149,10 +154,12 @@ const verifyEmail = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'User not found...' });
         }
 
         if (user.otp != otp || user.otpExpires < Date.now()) {
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'Invalid or expired OTP.' });
         }
 
@@ -189,6 +196,7 @@ const verifyEmail = async (req, res) => {
             userInfo
         });
     } catch (err) {
+        logger.error(`Internal Server Error...`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -212,10 +220,12 @@ const login = async(req, res) => {
         }
 
         if(!user){
+            logger.warn(`User Not Found...`);
             return res.status(400).json({message: 'User Not Found...'})
         }
         const matchedPassword = await bcrypt.compare(password, user.password)
         if(!matchedPassword){
+            logger.warn(`Incorrect Credentials.. Please try again.`);
             return res.status(400).json({ message: 'Incorrect Credentials.. Please try again.'})
         }
 
@@ -230,7 +240,6 @@ const login = async(req, res) => {
         const token = jwt.sign(payload, secretKey, options)
 
         const userRole = user.role
-
         res.status(200).json({
             success: true,
             message: 'User logged in successfully',
@@ -239,6 +248,7 @@ const login = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Login error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -255,6 +265,7 @@ const forgotPassword = async (req, res) => {
         // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'User not found' });
         }
 
@@ -326,6 +337,7 @@ const forgotPassword = async (req, res) => {
     res.status(200).json({ message: 'Password reset email sent successfully' });
     } catch (err) {
         console.error(err);
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -350,6 +362,7 @@ const resetPassword = async (req, res) => {
         });
 
         if (!user) {
+            logger.warn(`Invalid or expired token...`);
             return res.status(400).json({ message: 'Invalid or expired token' });
         }
 
@@ -366,7 +379,6 @@ const resetPassword = async (req, res) => {
 
         const token = user.getSignedJwtToken();
         const userRole = user.role
-
         res.status(200).json({
             message: 'Password changed successfully',
             success: true,
@@ -375,6 +387,7 @@ const resetPassword = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
+        logger.error(`Server Error: ${err.message}`);
         res.status(500).json({ message: 'Server Error', error: err.message });
     }
 };
@@ -385,12 +398,14 @@ const changePassword = async (req, res) => {
         const userId = req.user._id
         const user = await User.findById(userId)
         if(!user){
+            logger.warn(`User not authenticated...`);
             return res.status(400).json({message: 'User not authenticated'})
         }
 
         const {password, newPassword} = req.body
         const matchedPassword = await bcrypt.compare(password, user.password)
         if(!matchedPassword){
+            logger.error(`Current Password Not Correct...`);
             return res.status(400).json({message: 'Current Password Not Correct'})
         }
 
@@ -406,6 +421,7 @@ const changePassword = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

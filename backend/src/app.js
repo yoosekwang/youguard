@@ -14,6 +14,7 @@ const settingRoutes = require('./routes/settingRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const bodyParser = require('body-parser')
 const connectDB = require('../src/config/db')
+const logRoutes = require("./routes/logRoutes");
 const app = express();
 const { swaggerUi, swaggerDocs } = require('./config/swagger');
 const cors = require('cors')
@@ -46,6 +47,7 @@ app.use('/api', softwareRoutes)
 app.use('/api', userRoutes)
 app.use('/api', developerRoutes)
 app.use('/api', regionRoutes)
+app.use("/api/logs", logRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 

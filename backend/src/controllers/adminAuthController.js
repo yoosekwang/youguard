@@ -5,7 +5,7 @@ const dotenv = require('dotenv').config()
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const emailjs = require('emailjs-com')
-
+const logger = require("../logger");
 require('dotenv').config();
 
 // Email Transporter Configuration (AWS SES)
@@ -31,6 +31,7 @@ const transporter = nodemailer.createTransport({
   
       console.log("Email sent to:", to);
     } catch (error) {
+      logger.error(`Email sending error: ${error}`);
       console.error("Email sending error:", error);
     }
   };
@@ -40,6 +41,7 @@ const signup = async (req, res) => {
         const { name, email, password } = req.body
         const admin = await Admin.findOne({ email })
         if (admin) {
+            logger.warn(`Admin already exists...`);
             return res.status(400).json('Admin already exists...')
         }
         const salt = await bcrypt.genSalt(10)
@@ -76,6 +78,7 @@ const signup = async (req, res) => {
             adminInfo
         })
     } catch (err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -92,10 +95,12 @@ const login = async (req, res) => {
         const admin = await Admin.findOne({ email })
 
         if (!admin) {
+            logger.warn(`Admin Not Found...`);
             return res.status(400).json({ message: 'Admin Not Found...' })
         }
         const matchedPassword = await bcrypt.compare(password, admin.password)
         if (!matchedPassword) {
+            logger.warn(`Incorrect Credentials.. Please try again.`);
             return res.status(400).json({ message: 'Incorrect Credentials.. Please try again.' })
         }
 
@@ -119,6 +124,7 @@ const login = async (req, res) => {
         })
     }
     catch (err) {
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -133,6 +139,7 @@ const forgotPassword = async (req, res) => {
         const { email } = req.body
         const admin = await Admin.findOne({ email })
         if (!admin) {
+            logger.warn(`Admin Not Found...`);
             return res.status(400).json({ message: 'Admin Not Found...' })
         }
 
@@ -207,6 +214,7 @@ const forgotPassword = async (req, res) => {
     await sendEmail(admin.email, "Password Reset Request", resetTemplate);
     res.status(200).json({ message: 'Password reset email sent successfully' });
     } catch (err) {
+        logger.error(`Internal Server Error: ${err.message}`);
         console.error(err);
         res.status(500).json({
             success: false,
@@ -214,6 +222,7 @@ const forgotPassword = async (req, res) => {
             error: err.message
         });
     }
+    
 }
 
 const resetPassword = async (req, res) => {
@@ -230,6 +239,7 @@ const resetPassword = async (req, res) => {
         });
 
         if (!admin) {
+            logger.warn(`Invalid token`);
             return res.status(400).json({ message: 'Invalid token' });
         }
 
@@ -249,6 +259,7 @@ const resetPassword = async (req, res) => {
         res.status(200).json({ message: "Password Changed Successfully", success: true, token });
     } catch (err) {
         console.error(err);
+        logger.error(`erver Error: ${err.message}`);
         res.status(500).json({ message: 'Server Error' });
     }
 };
@@ -259,12 +270,14 @@ const changePassword = async (req, res) => {
         console.log(adminId)
         const admin = await Admin.findById(adminId)
         if (!admin) {
+            logger.warn(`Admin not found`);
             return res.status(400).json({ message: 'Admin not found' })
         }
 
         const { password, newPassword } = req.body
         const matchedPassword = await bcrypt.compare(password, admin.password)
         if (!matchedPassword) {
+            logger.warn(`Current Password Not Correct`);
             return res.status(400).json({ message: 'Current Password Not Correct' })
         }
 
@@ -280,6 +293,7 @@ const changePassword = async (req, res) => {
         })
     }
     catch (err) {
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -293,6 +307,7 @@ const getAdminDetails = async (req, res) => {
         const adminId = req.user._id
         const admin = await Admin.findById(adminId)
         if (!admin) {
+            logger.warn(`Admin not found`);
             return res.status(404).json({ message: 'Admin not found' })
         }
 
@@ -309,6 +324,7 @@ const getAdminDetails = async (req, res) => {
         })
     }
     catch (err) {
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -322,6 +338,7 @@ const changeName = async (req, res) => {
         const adminId = req.user._id
         const admin = await Admin.findById(adminId)
         if (!admin) {
+            logger.warn(`Admin not found`);
             return res.status(404).json({ message: 'Admin not found' })
         }
 
@@ -337,6 +354,7 @@ const changeName = async (req, res) => {
         })
     }
     catch (err) {
+        logger.warn(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

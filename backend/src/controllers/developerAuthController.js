@@ -5,23 +5,45 @@ const dotenv = require('dotenv').config()
 const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const emailjs = require('emailjs-com')
-
+const logger = require("../logger");
 require('dotenv').config();
 
 
+// Email Transporter Configuration (AWS SES)
 const transporter = nodemailer.createTransport({
-    service: 'gmail', 
-    auth: { 
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
+    host: process.env.AWS_SMTP_HOST,
+    port: 587, // Try 587 for TLS (or 465 for SSL)
+    secure: false, // false for TLS, true for SSL
+    auth: {
+      user: process.env.AWS_SMTP_USER,
+      pass: process.env.AWS_SMTP_PASSWORD,
+    },
+  });
+  
+  // Function to Send Email
+  const sendEmail = async (to, subject, html) => {
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL,
+        to,
+        subject,
+        html,
+      });
+  
+      console.log("Email sent to:", to);
+    } catch (error) {
+      logger.error(`Email sending error: ${error}`);
+      console.error("Email sending error:", error);
     }
-});
+  };
+
 
 const signup = async(req, res) => {
     try{
         const { name, email, password } = req.body
     const developer = await Developer.findOne({ email })
     if(developer){
+        logger.warn(`Developer already exists...`);
         return res.status(400).json('Developer already exists...')
     }
     const salt = await bcrypt.genSalt(10)
@@ -58,6 +80,7 @@ const signup = async(req, res) => {
         developerInfo
     }) 
     } catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -74,10 +97,12 @@ const login = async(req, res) => {
         const developer = await Developer.findOne({ email })
 
         if(!developer){
+            logger.warn(`Developer Not Found...`);
             return res.status(400).json({message: 'Developer Not Found...'})
         }
         const matchedPassword = await bcrypt.compare(password, developer.password)
         if(!matchedPassword){
+            logger.warn(`Incorrect Credentials.. Please try again.`);
             return res.status(400).json({ message: 'Incorrect Credentials.. Please try again.'})
         }
 
@@ -101,6 +126,7 @@ const login = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -115,6 +141,7 @@ const forgotPassword = async (req, res) => {
         const { email } = req.body
         const developer = await Developer.findOne({email})
         if(!developer){
+            logger.warn(`Internal Server Error: ${err.message}`);
             return res.status(400).json({ message: 'Developer Not Found...'}) 
         }
 
@@ -185,28 +212,19 @@ const forgotPassword = async (req, res) => {
 </table>
 </body>
 `
-
-    const mailOptions = {
-        from: process.env.EMAIL,
-        to: developer.email,
-        subject: 'Reset Your Password',
-        html: resetTemplate
-    };
-    //
-    await transporter.sendMail(mailOptions);
-
-
+    //Send email
+    await sendEmail(admin.email, "Password Reset Request", resetTemplate);
     res.status(200).json({ message: 'Password reset email sent successfully' });
-
-    // email sending to come in later
-    }
-    catch(err){
+    } catch (err) {
+        logger.error(`Internal Server Error: ${err.message}`);
+        console.error(err);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
             error: err.message
-        })
-    }
+        });
+    }    
+    
 }
 
 const resetPassword = async (req, res) => {
@@ -223,6 +241,7 @@ const resetPassword = async (req, res) => {
       });
   
       if (!developer) {
+        logger.warn(`Invalid token`);
         return res.status(400).json({ message: 'Invalid token' });
       }
   
@@ -237,11 +256,11 @@ const resetPassword = async (req, res) => {
       await developer.save();
   
       // Create new token
-      const token = developer.getSignedJwtToken();
-  
+      const token = developer.getSignedJwtToken();  
       res.status(200).json({ message : "Password Changed Successfully",  success: true, token });
     } catch (err) {
       console.error(err);
+      logger.error(`Server Error: ${err.message}`);
       res.status(500).json({ message: 'Server Error' });
     }
   };
@@ -252,12 +271,14 @@ const changePassword = async (req, res) => {
         console.log(developerId)
         const developer = await Developer.findById(developerId)
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(400).json({message: 'Developer not found'})
         }
 
         const {password, newPassword} = req.body
         const matchedPassword = await bcrypt.compare(password, developer.password)
         if(!matchedPassword){
+            logger.warn(`Current Password Not Correct`);
             return res.status(400).json({message: 'Current Password Not Correct'})
         }
 
@@ -273,6 +294,7 @@ const changePassword = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -286,6 +308,7 @@ const getDeveloperDetails = async(req, res) => {
         const developerId = req.user._id
         const developer = await Developer.findById(developerId)
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(404).json({ message: 'Developer not found'})
         }
 
@@ -302,6 +325,7 @@ const getDeveloperDetails = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -315,6 +339,7 @@ const changeName = async(req, res) => {
         const developerId = req.user._id
         const developer = await Developer.findById(developerId)
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(404).json({ message: 'Developer not found'})
         }
 
@@ -329,6 +354,7 @@ const changeName = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err.message}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

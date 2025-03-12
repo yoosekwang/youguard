@@ -211,7 +211,7 @@ export default {
                 console.log(data)
                 this.isLoading = false;
             } catch (error) {
-                toast.error('An error occurred. Please try again later.')
+                toast.error(error.response.data || 'An error occurred. Please try again later.')
                 console.error(error)
                 this.isLoading = false;
             }
