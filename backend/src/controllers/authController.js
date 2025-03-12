@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
-const dotenv = require('dotenv').config()
-const emailjs = require('emailjs-com')
 const crypto = require('crypto')
 const nodemailer = require("nodemailer");
 
