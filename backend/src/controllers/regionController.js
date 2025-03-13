@@ -1,9 +1,10 @@
 const Region = require('../models/Region')
-
+const logger = require("../logger");
 const newRegion = async (req, res) => {
     try{
         const {region} = req.body
         if(!region){
+            logger.warn(`Region is required`);
             return res.status(400).json({ message: 'Region is required'})
         }
         const newRegion = new Region({
@@ -20,6 +21,7 @@ const newRegion = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -38,6 +40,7 @@ const getRegions = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -51,6 +54,7 @@ const deleteRegion = async (req, res) => {
         const regionId = req.params.id
         const region = await Region.findByIdAndDelete(regionId)
         if(!region){
+            logger.warn(`Region not found...`);
             return res.status(400).json({ message: 'Region not found...'})
         }
         res.status(200).json({
@@ -59,6 +63,7 @@ const deleteRegion = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

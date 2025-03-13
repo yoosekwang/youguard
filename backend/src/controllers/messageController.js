@@ -1,12 +1,14 @@
 const Message = require('../models/Message')
 const User = require('../models/User')
 const Admin = require('../models/Admin')
+const logger = require("../logger");
 
 const sendMessage = async (req, res) => {
     try {
         const { content } = req.body;
 
         if (!content || content.trim() === '') {
+            logger.warn(`Message content is required`);
             return res.status(400).json({ message: 'Message content is required' });
         }
 
@@ -19,6 +21,7 @@ const sendMessage = async (req, res) => {
             // Admin sends a message to a user (id in params)
             const userIdInParams = req.params.id;
             if (!userIdInParams) {
+                logger.warn(`Receiver user ID is required`);
                 return res.status(400).json({ message: 'Receiver user ID is required' });
             }
 
@@ -35,6 +38,7 @@ const sendMessage = async (req, res) => {
         }
 
         if (!sender || !receiver) {
+            logger.warn(`Sender or receiver not found`);
             return res.status(400).json({ message: 'Sender or receiver not found' });
         }
 
@@ -54,6 +58,7 @@ const sendMessage = async (req, res) => {
             data: message,
         });
     } catch (err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -97,6 +102,7 @@ const getMessages = async (req, res) => {
             .sort({ createdAt: -1 });
 
         if (!messages || messages.length === 0) {
+            logger.warn(`No messages found`);
             return res.status(404).json({ message: 'No messages found' });
         }
 
@@ -106,6 +112,7 @@ const getMessages = async (req, res) => {
             messages,
         });
     } catch (err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -125,6 +132,7 @@ const getMessageById = async (req, res) => {
 
         // If no message is found
         if (!message) {
+            logger.warn(`Message not found.`);
             return res.status(404).json({
                 success: false,
                 message: 'Message not found.',
@@ -137,6 +145,7 @@ const getMessageById = async (req, res) => {
             data: message,
         });
     } catch (err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error.',
@@ -150,11 +159,13 @@ const getMessagesByUser = async (req, res) => {
         const userId = req.params.id;
 
         if (!userId) {
+            logger.warn(`User ID is required`);
             return res.status(400).json({ message: 'User ID is required' });
         }
 
         const user = await User.findById(userId);
         if (!user) {
+            logger.warn(`User not found`);
             return res.status(404).json({ message: 'User not found' });
         }
 
@@ -174,6 +185,7 @@ const getMessagesByUser = async (req, res) => {
             messages
         });
     } catch (err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

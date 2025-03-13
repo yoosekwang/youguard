@@ -1,9 +1,10 @@
 const User = require('../models/User')
-
+const logger = require("../logger");
 const getUsers = async (req, res) => {
     try{
         const users = await User.find()
         if(users.length == 0 ){
+            logger.warn("No Users found...");
             return res.status(400).json({ message: 'No Users found...'})
         }
         res.status(200).json({
@@ -13,6 +14,7 @@ const getUsers = async (req, res) => {
         })
     }
     catch(err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -25,6 +27,7 @@ const getUserById = async (req, res) => {
         const userId = req.params.id
         const user  = await User.findById(userId)
         if(!user){
+            logger.warn(`User not found....`);
             return res.status(400).json({ message: 'User not found....'})
         }
         res.status(200).json({
@@ -33,6 +36,7 @@ const getUserById = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -45,6 +49,7 @@ const updateUser = async (req, res) => {
     try{        
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true})
         if(!user){
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'User not found...'})
         }
         const updatedUser = {
@@ -62,6 +67,7 @@ const updateUser = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -75,9 +81,11 @@ const approveUser = async (req, res) => {
         const userId = req.params.id
         const user = await User.findById(userId)
         if(!user){
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'User not found...'})
         }
         if(user.isApproved){
+            logger.warn(`User has already been approved...`);
             return res.status(400).json({ message: 'User has already been approved...'})
         }
         user.isApproved = true
@@ -98,6 +106,7 @@ const approveUser = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -111,9 +120,11 @@ const revokeUser = async (req, res) => {
         const userId = req.params.id
         const user = await User.findById(userId)
         if(!user){
+            logger.warn(`User not found...`);
             return res.status(400).json({ message: 'User not found...'})
         }
         if(!user.isApproved){
+            logger.warn(`User not approved initially`);
             return res.status(400).json({ message: 'User not approved initially'})
         }
         user.isApproved = false
@@ -134,6 +145,7 @@ const revokeUser = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -146,6 +158,7 @@ const deleteUser = async (req, res) => {
     try{
         const user = await User.findByIdAndDelete(req.params.id)
         if(!user){
+            logger.warn(`User not found..`);
             return res.status(400).json({ message: 'User not found..'})
         }
         res.status(200).json({
@@ -154,6 +167,7 @@ const deleteUser = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -168,6 +182,7 @@ const getCurrentUser = async (req, res) => {
         const user = await User.findById(userId)
 
         if(!user){
+            logger.warn(`User Not Found...`);
             return res.status(400).json({ message: 'User Not Found...'})
         }
 
@@ -189,6 +204,7 @@ const getCurrentUser = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

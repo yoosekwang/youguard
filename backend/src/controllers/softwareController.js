@@ -2,6 +2,7 @@ const Software = require('../models/Software')
 const User = require('../models/User')
 const path = require('path');
 const AWS = require('aws-sdk');
+const logger = require("../logger");
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -16,6 +17,7 @@ const getSoftwares = async (req, res) => {
         const softwares = await Software.find()
         .sort({createdAt : -1})
         if(!softwares){
+            logger.warn(`No softwares found...`);
             return res.status(400).json(({message: 'No softwares found...'}))
         }
         res.status(200).json({
@@ -25,6 +27,7 @@ const getSoftwares = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -38,6 +41,7 @@ const getSoftwareById = async ( req, res) => {
         const softwareId = req.params.id
         const software = await Software.findById(softwareId)
         if(!software){
+            logger.warn(`Software not found...`);
             return res.status(400).json({message: 'Software not found...'})
         }
         res.status(200).json({
@@ -47,6 +51,7 @@ const getSoftwareById = async ( req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -60,6 +65,7 @@ const downloadSoftware = async (req, res) => {
         const softwareId = req.params.id
         const software = await Software.findById(softwareId)
         if(!software){
+            logger.warn(`Software not found`);
             return res.status(400).json({ message: 'Software not found'})
         }
 
@@ -68,10 +74,12 @@ const downloadSoftware = async (req, res) => {
         const userId = req.user._id
         const user = await User.findById(userId)
         if(!user){
+            logger.warn(`User not found...`);
             return res.status(400).json({message: 'User not found...'})
         }
 
         if(!user.isApproved){
+            logger.warn(`User not approved...`);
             return res.status(400).json({message: 'User not approved...'})
         }
 
@@ -84,6 +92,7 @@ const downloadSoftware = async (req, res) => {
         })
     }
     catch(err){
+        logger.warn(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -95,6 +104,7 @@ const uploadSoftware = async (req, res) => {
     try {
         // Validate file upload
         if (!req.file) {
+            logger.warn(`No file uploaded.`);
             return res.status(400).json({
                 success: false,
                 message: 'No file uploaded.',
@@ -138,6 +148,7 @@ const uploadSoftware = async (req, res) => {
             },
         });
     } catch (error) {
+        logger.error(`Failed to upload software: ${error}`);
         res.status(500).json({
             success: false,
             message: 'Failed to upload software.',

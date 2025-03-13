@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-
+const logger = require("../logger");
 // Ensure the uploads directory exists
 const uploadDir = path.join(__dirname, '../..', 'uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -40,10 +40,12 @@ const upload = multer({
 const uploadFile = (req, res) => {
   upload.single('file')(req, res, (err) => {
     if (err) {
+      logger.error(err);
       return res.status(400).json({ success: false, message: err.message });
     }
 
     if (!req.file) {
+      logger.warn("No file uploaded!");
       return res.status(400).json({ success: false, message: 'No file uploaded!' });
     }
 

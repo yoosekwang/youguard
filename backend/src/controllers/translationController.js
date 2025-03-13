@@ -1,6 +1,6 @@
 const Translation = require('../models/Translation')
 const path = require('path');
-
+const logger = require("../logger");
 
 const getTranslation = async (req, res) => {
 
@@ -8,6 +8,7 @@ const getTranslation = async (req, res) => {
         const translation = await Translation.findOne();
 
         if (!translation) {
+            logger.warn(`Translations not found`);
             return res.status(404).json({ message: 'Translations not found' });
         }
 
@@ -19,6 +20,7 @@ const getTranslation = async (req, res) => {
        
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -48,6 +50,7 @@ const updateTranslation = async (req, res) => {
             data: translation
         })
     } catch (error) {
+        logger.error(`Internal Server Error: ${error}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -65,6 +68,7 @@ const insertTranslation = async (req, res) => {
 
     // Validate that both 'en' and 'ko' translations are provided
     if (!en || !ko) {
+      logger.warn(`Both 'en' and 'ko' translations are required.`);
       return res.status(400).json({ message: "Both 'en' and 'ko' translations are required." });
     }
 

@@ -1,10 +1,12 @@
 const Developer = require('../models/Developer')
 const bcrypt = require('bcrypt')
+const logger = require("../logger");
 
 const getDevelopers = async (req, res) => {
     try{
         const developers = await Developer.find()
         if(developers.length == 0 ){
+            logger.warn(`No Developers found...`);
             return res.status(400).json({ message: 'No Developers found...'})
         }
         res.status(200).json({
@@ -14,6 +16,7 @@ const getDevelopers = async (req, res) => {
         })
     }
     catch(err) {
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -33,10 +36,12 @@ const updateDeveloper = async (req, res) => {
 
         if (password || password_confirmation) {
             if (!password || !password_confirmation) {
+                logger.warn(`Both password and password confirmation are required.`);
                 return res.status(400).json({ message: "Both password and password confirmation are required." });
             }
 
             if (password !== password_confirmation) {
+                logger.warn(`Passwords do not match.`);
                 return res.status(400).json({ message: "Passwords do not match." });
             }
 
@@ -48,6 +53,7 @@ const updateDeveloper = async (req, res) => {
 
         const developer = await Developer.findByIdAndUpdate(req.params.id, updatedDeveloper, { new: true})
         if(!developer){
+            logger.warn(`Developer not found...`);
             return res.status(400).json({ message: 'Developer not found...'})
         }
 
@@ -58,6 +64,7 @@ const updateDeveloper = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -71,6 +78,7 @@ const getDeveloper = async(req, res) => {
       
         const developer = await Developer.findOne()
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(404).json({ message: 'Developer not found'})
         }
 
@@ -87,6 +95,7 @@ const getDeveloper = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -100,6 +109,7 @@ const changeDeveloperName = async(req, res) => {
      
         const developer = await Developer.findOne()
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(404).json({ message: 'Developer not found'})
         }
 
@@ -115,6 +125,7 @@ const changeDeveloperName = async(req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -129,12 +140,14 @@ const changeDeveloperPassword = async (req, res) => {
 
         const developer = await Developer.findOne()
         if(!developer){
+            logger.warn(`Developer not found`);
             return res.status(400).json({message: 'Developer not found'})
         }
 
         const {password, newPassword} = req.body
         const matchedPassword = await bcrypt.compare(password, developer.password)
         if(!matchedPassword){
+            logger.warn(`Current Password Not Correct`);
             return res.status(400).json({message: 'Current Password Not Correct'})
         }
 
@@ -150,6 +163,7 @@ const changeDeveloperPassword = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',

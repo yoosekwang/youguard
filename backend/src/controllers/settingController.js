@@ -1,7 +1,7 @@
 const Setting = require('../models/Setting')
 const path = require('path');
-
-
+const logger = require("../logger");
+const { error } = require('winston');
 const getSettings = async (req, res) => {
 
     try{
@@ -13,6 +13,7 @@ const getSettings = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -39,6 +40,7 @@ const getSettingsAsKeyValue = async (req, res) => {
         })
     }
     catch(err){
+        logger.error(`Internal Server Error: ${err}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
@@ -68,6 +70,7 @@ const updateSettings = async (req, res) => {
             data: settingsData
         })
     } catch (error) {
+        logger.error(`Internal Server Error: ${error}`);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
