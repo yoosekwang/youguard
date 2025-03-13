@@ -213,7 +213,7 @@ const forgotPassword = async (req, res) => {
 </body>
 `
     //Send email
-    await sendEmail(admin.email, "Password Reset Request", resetTemplate);
+    await sendEmail(developer.email, "Password Reset Request", resetTemplate);
     res.status(200).json({ message: 'Password reset email sent successfully' });
     } catch (err) {
         logger.error(`Internal Server Error: ${err.message}`);

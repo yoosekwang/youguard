@@ -109,7 +109,7 @@ const submitEmail = async () => {
             debugInfo.value = { message: err.message };
         }
 
-        toast.error(error.value);
+        toast.error(err || "Something goes wrong!");
     } finally {
         loading.value = false;
     }

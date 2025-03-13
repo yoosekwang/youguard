@@ -88,7 +88,6 @@ const submitEmail = async () => {
 
     } catch (err) {
         console.error('Error details:', err);
-
         // More specific error handling
         if (err.response) {
             // Server responded with error
@@ -104,11 +103,12 @@ const submitEmail = async () => {
             debugInfo.value = { request: 'No response received' };
         } else {
             // Request setup error
+            
             error.value = 'Failed to send request. Please try again.';
             debugInfo.value = { message: err.message };
         }
 
-        toast.error(error.value);
+        toast.error(err || "Something goes wrong!");
     } finally {
         loading.value = false;
     }

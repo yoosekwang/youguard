@@ -127,6 +127,7 @@ const submitPasswordReset = async () => {
             router.push("/admin/signin");
         }, 2000);
     } catch (err) {
+        toast.error(err || "Something goes wrong!");
         console.error("Error resetting password:", err);
         message.value = "Failed to reset password. Please try again.";
         error.value = true;
