@@ -24,6 +24,7 @@ router.get("/", (req, res) => {
         const logs = fs.readFileSync(path.join(__dirname, "../logs/activity.log"), "utf8");
         res.json({ logs: logs.split("\n") });
     } catch (err) {
+        logger.error(err);
         res.status(500).json({ message: "Could not read logs" });
     }
 });
