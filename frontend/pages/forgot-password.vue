@@ -14,6 +14,7 @@
             </div>
             <h1 class="text-2xl font-bold mb-6 text-center">{{ $t("forgot_password_forgot_password") }}</h1>
             <form @submit.prevent="submitEmail" class="space-y-4">
+                T
                 <input v-model="email" type="email" :placeholder="$t('forgot_password_enter_your_email')"
                     class="custom-input w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 <button type="submit"
